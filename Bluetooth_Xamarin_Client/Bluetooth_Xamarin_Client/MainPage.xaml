@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Visual="Material"
+             Title="BLE File Transfer"
+             x:Class="Bluetooth_Xamarin_Client.MainPage">
+
+    <StackLayout Orientation="Vertical">
+        <Button Text="Select"
+                Margin="10" 
+                Clicked="PickFile_Clicked"/>
+        <Label Text="NOTE - You can only select the following type of files : JPEG, JSON, ZIP"
+                        Margin="10" />
+        <StackLayout Orientation="Horizontal" Margin="10">
+            <Label Text="Selected file : "/>
+            <Label x:Name="SelectedFileLabel" Text=""/>
+        </StackLayout>
+        <Button x:Name="SendButton"
+                Text="Send"
+                Margin="10" 
+                IsVisible="False"
+                Clicked="SendFileButton_Clicked"/>
+    </StackLayout>
+</ContentPage>
