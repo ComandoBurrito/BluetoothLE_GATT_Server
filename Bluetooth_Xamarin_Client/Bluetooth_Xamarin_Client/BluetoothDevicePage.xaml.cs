@@ -18,6 +18,7 @@ namespace Bluetooth_Xamarin_Client
     {
         private readonly IAdapter _bluetoothAdapter;
         private List<IDevice> _gattDevices = new List<IDevice>();
+
         private readonly Plugin.FilePicker.Abstractions.FileData _pickedFile; //Para recuperar
         public Plugin.FilePicker.Abstractions.FileData pickedFile;
 
@@ -67,6 +68,9 @@ namespace Bluetooth_Xamarin_Client
             _gattDevices.Clear();
             await _bluetoothAdapter.StartScanningForDevicesAsync();
             listView.ItemsSource = _gattDevices.ToArray();
+            
+            //Falta mostar los que no tiene nombre como "N/A" y no solo ""
+            
             ScanButton.IsEnabled = true;
         }
 
@@ -78,8 +82,8 @@ namespace Bluetooth_Xamarin_Client
         private async void FoundBluetoothDevicesListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             IDevice selectedItem = e.SelectedItem as IDevice;
-            MainPage selectedFile = new MainPage(); //'pickedFile' es la var que tome de la clase Main gracias a su constructor
-            pickedFile = selectedFile.SelectedFile();
+            MainPage selectedFile = new MainPage(); //'selectedFile' es la var que toma de la clase Main
+            pickedFile = selectedFile.SelectedFile(); //Dentro de Main class se encuentra este metodo
 
             if (selectedItem.State == Plugin.BLE.Abstractions.DeviceState.Connected) //If the Client is already connected
             {

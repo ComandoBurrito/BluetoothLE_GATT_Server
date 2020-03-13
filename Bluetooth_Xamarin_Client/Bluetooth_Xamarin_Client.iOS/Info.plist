@@ -34,9 +34,32 @@
 	<string>Bluetooth_Xamarin_Client</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+  
+  <key>UIBackgroundModes</key>
+  <array>
+    <!--for connecting to devices (client)-->
+    <string>bluetooth-central</string>
+
+    <!--for server configurations if needed
+    <string>bluetooth-peripheral</string>-->
+  </array>
+
+  <!--Description of the Bluetooth request message (required on iOS 10, deprecated)
+  <key>NSBluetoothPeripheralUsageDescription</key>
+  <string>YOUR CUSTOM MESSAGE</string>-->
+
+  <!--Description of the Bluetooth request message (required on iOS 13)-->
+  <key>NSBluetoothAlwaysUsageDescription</key>
+  <string>YOUR CUSTOM MESSAGE</string>
+
+  <key>NSLocationAlwaysAndWhenInUsageDescription</key>
+  <string>Your current location is used to provide you with a local position according to other devices.</string>
+  
+  <!--
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the react-native-permission in its code.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Test Location Permission</string>
+	
+-->
+
 </dict>
 </plist>

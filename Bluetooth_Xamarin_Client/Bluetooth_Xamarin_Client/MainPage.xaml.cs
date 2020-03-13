@@ -5,8 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Plugin.FilePicker; //Added
-using System.IO; //Added
+using Plugin.FilePicker; //Added from here
+using System.IO;
+using Xamarin.Forms.Xaml;
+using Plugin.BLE;
+using Plugin.BLE.Abstractions.Contracts;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions; //To here
 //UTType List : https://developer.apple.com/library/archive/documentation/Miscellaneous/Reference/UTIRef/Articles/System-DeclaredUniformTypeIdentifiers.html
 
 
@@ -41,13 +46,10 @@ namespace Bluetooth_Xamarin_Client
                 fileTypes = new string[] { "public.json", "public.jpeg", "com.pkware.zip-archive" }; // same as iOS constant UTType.Image
             }
 
-            //await PickAndProcessFile(fileTypes); //File Picker Menu
             pickedFile = await CrossFilePicker.Current.PickFile(fileTypes);
-            //string selectedFilePath;
             if (pickedFile != null)
             {
                 SelectedFileLabel.Text = pickedFile.FileName;
-                //selectedFilePath = pickedFile.FilePath;
                 SendButton.IsVisible = true;
             }
         }
@@ -58,62 +60,5 @@ namespace Bluetooth_Xamarin_Client
             
             await Navigation.PushAsync(new BluetoothDevicePage());
         }
-
-
-
-        /* private async Task PickAndProcessFile(string[] fileTypes)
-         {
-             try
-             {
-                 //var pickedFile = await CrossFilePicker.Current.PickFile(fileTypes);
-                 string selectedFilePath, stringSourceFile;
-                 if (pickedFile != null)
-                 {
-                     SelectedFileLabel.Text = pickedFile.FileName;
-                     selectedFilePath = pickedFile.FilePath;
-
-                     if (pickedFile.FileName.EndsWith("json") || pickedFile.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase)
-                        || pickedFile.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase) || pickedFile.FileName.EndsWith("zip"));
-                     {
-                         stringSourceFile = FileToBase64(selectedFilePath);
-                         splitPorcess(stringSourceFile);
-                     }
-
-                 }
-             }
-             catch(Exception ex)
-             {
-                 SelectedFileLabel.Text = ex.ToString();
-             }
-         }*/
-
-
-
-        /// <summary>
-        /// CONVERSION FUNCTIONS
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        /*public string FileToBase64(string path)
-        {
-            //Provide read acces to the file
-            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-            //Create a byte array of the file stream length
-            byte[] Data = new byte[fs.Length];
-            //Read block of bytes from stream into the byte array
-            fs.Read(Data, 0, System.Convert.ToInt32(fs.Length));
-            //Close the File Stream
-            fs.Close();
-            string base64String = Convert.ToBase64String(Data);
-            return base64String;
-        }
-
-        private void splitProcess(string str512)
-        {
-            int chunckSize = 512;
-            int stringLength = str512.Length;
-
-        }*/
-
     }
 }
