@@ -2,7 +2,7 @@
 using Bluetooth_Common; //GattCharacteristicIdentifier.cs
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-
+//Test commit
 namespace Bluetooth_GATTServer
 {
     public sealed partial class MainPage : Page
