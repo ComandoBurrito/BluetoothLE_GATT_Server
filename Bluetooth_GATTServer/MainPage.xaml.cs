@@ -47,9 +47,9 @@ namespace Bluetooth_GATTServer
             await _gattServer.AddReadWriteCharacteristicAsync(GattCharacteristicIdentifiers.DataExchange, "Data exchange");
             //NOTE : In case you want other characteristics, you must unlock the following variables.
             //       Also the "GattCharacteristicIdentifiers.cs" variables
-            ///await _gattServer.AddReadCharacteristicAsync(GattCharacteristicIdentifiers.FirmwareVersion, "1.0.0.1", "Firmware Version");
-            ///await _gattServer.AddWriteCharacteristicAsync(GattCharacteristicIdentifiers.InitData, "Init info");
-            ///await _gattServer.AddReadCharacteristicAsync(GattCharacteristicIdentifiers.ManufacturerName, "Jenx.si", "Manufacturer");
+            //await _gattServer.AddReadCharacteristicAsync(GattCharacteristicIdentifiers.FirmwareVersion, "1.0.0.1", "Firmware Version");
+            //await _gattServer.AddWriteCharacteristicAsync(GattCharacteristicIdentifiers.InitData, "Init info");
+            //await _gattServer.AddReadCharacteristicAsync(GattCharacteristicIdentifiers.ManufacturerName, "Jenx.si", "Manufacturer");
 
             _gattServer.Start();
         }

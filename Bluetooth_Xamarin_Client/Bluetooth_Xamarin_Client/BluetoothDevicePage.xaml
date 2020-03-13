@@ -13,7 +13,7 @@
                     Text="Scan"
                     Clicked="ScanButton_Clicked"
                     Margin="10" />
-            <ListView x:Name="listView" BackgroundColor="#FFFFFF"
+            <ListView x:Name="listView" BackgroundColor="#CDCDCD"
                       ItemSelected="FoundBluetoothDevicesListView_ItemSelected"/>
         </StackLayout>
     </ContentPage.Content>

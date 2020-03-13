@@ -17,10 +17,9 @@ namespace Bluetooth_Xamarin_Client
     public partial class BluetoothDevicePage : ContentPage
     {
         private readonly IAdapter _bluetoothAdapter;
+        private readonly IDevice selectedDevice;
         private List<IDevice> _gattDevices = new List<IDevice>();
-
-        private readonly Plugin.FilePicker.Abstractions.FileData _pickedFile; //Para recuperar
-        public Plugin.FilePicker.Abstractions.FileData pickedFile;
+        //public Plugin.FilePicker.Abstractions.FileData pickedFile;
 
         public BluetoothDevicePage() //Stream selectedFile
         {
@@ -64,7 +63,7 @@ namespace Bluetooth_Xamarin_Client
                 await DisplayAlert("Permission required", "Application needs location permission", "OK");
                 return;
             }
-
+            
             _gattDevices.Clear();
             await _bluetoothAdapter.StartScanningForDevicesAsync();
             listView.ItemsSource = _gattDevices.ToArray();
@@ -81,22 +80,25 @@ namespace Bluetooth_Xamarin_Client
         /// <param name="e"></param>
         private async void FoundBluetoothDevicesListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            IDevice selectedItem = e.SelectedItem as IDevice;
-            MainPage selectedFile = new MainPage(); //'selectedFile' es la var que toma de la clase Main
-            pickedFile = selectedFile.SelectedFile(); //Dentro de Main class se encuentra este metodo
-
-            if (selectedItem.State == Plugin.BLE.Abstractions.DeviceState.Connected) //If the Client is already connected
+            //IDevice selectedItem = e.SelectedItem as IDevice;
+            //MainPage selectedFile = new MainPage(); //'selectedFile' es la var que toma de la clase Main
+            //PickedFile.PickedFile_Selected = selectedFile.SelectedFile(); //Dentro de Main class se encuentra este metodo
+            if (selectedDevice.State == Plugin.BLE.Abstractions.DeviceState.Connected) //If the Client is already connected
             {
-                await PickAndSendFile(pickedFile, selectedItem);                                       //Send the selected file
+                await PickAndSendFile(PickedFile.PickedFile_Selected);                                       //Send the selected file
                 //await Navigation.PushAsync(new BluetoothDataPage(selectedItem)); 
             }
             else //If it's not connected yet
             {
                 try
                 {
-                    await _bluetoothAdapter.ConnectToDeviceAsync(selectedItem);      //Connect to the selected device
-                    await PickAndSendFile(pickedFile, selectedItem);                                   //And then send the selected file
-                    //await Navigation.PushAsync(new BluetoothDataPage(selectedItem)); 
+                    await _bluetoothAdapter.ConnectToDeviceAsync(selectedDevice);      //Connect to the selected device
+                    
+                    if (selectedDevice.State == Plugin.BLE.Abstractions.DeviceState.Connected)
+                    {
+                        await IsConnected(PickedFile.PickedFile_Selected);                    //Sends a confirmation message if it's connected
+                        await PickAndSendFile(PickedFile.PickedFile_Selected);                                   //And then send the selected file
+                    }                    
                 }
                 catch
                 {
@@ -106,7 +108,7 @@ namespace Bluetooth_Xamarin_Client
             }
         }
 
-        private async Task PickAndSendFile(Plugin.FilePicker.Abstractions.FileData pickedFile, IDevice _connectedDevice)
+        private async Task PickAndSendFile(Plugin.FilePicker.Abstractions.FileData pickedFile)
         {
             try
             {
@@ -119,7 +121,7 @@ namespace Bluetooth_Xamarin_Client
                     {
                         strSourceFile = FileToBase64(selectedFilePath);
                         
-                        var service = await _connectedDevice.GetServiceAsync(GattCharacteristicIdentifiers.ServiceId);
+                        var service = await selectedDevice.GetServiceAsync(Guid.Parse("19536E67-3682-4588-9F3A-5340B6712150")); //_connectedDevice.GetServiceAsync(GattCharacteristicIdentifiers.ServiceId);
                         if (service != null)
                         {
                             var characteristic = await service.GetCharacteristicAsync(GattCharacteristicIdentifiers.DataExchange); //Send to the DataExchange identifier
@@ -143,6 +145,31 @@ namespace Bluetooth_Xamarin_Client
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
+
+        private async Task IsConnected(Plugin.FilePicker.Abstractions.FileData pickedFile)
+        {
+            try
+            {
+                if (pickedFile != null) //Double verification
+                {
+                        var service = await selectedDevice.GetServiceAsync(GattCharacteristicIdentifiers.ServiceId); //_connectedDevice.GetServiceAsync(GattCharacteristicIdentifiers.ServiceId);
+                    if (service != null)
+                        {
+                            var characteristic = await service.GetCharacteristicAsync(GattCharacteristicIdentifiers.DataExchange); //Send to the DataExchange identifier
+                            if (characteristic != null)
+                            {
+                                byte[] senddata = Encoding.UTF8.GetBytes("Device connected");
+                                var bytes = await characteristic.WriteAsync(senddata);
+                            }
+                        }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
         public string FileToBase64(string path)
         {
             //Provide read acces to the file
@@ -176,6 +203,8 @@ namespace Bluetooth_Xamarin_Client
                 bytes = await _characteristic.WriteAsync(senddata);
                 //receiveStr(str.512.Substring(i, chunkSize));
             }
+            senddata = Encoding.UTF8.GetBytes("end");
+            bytes = await _characteristic.WriteAsync(senddata);
             //receiveStr("end");
         }
 

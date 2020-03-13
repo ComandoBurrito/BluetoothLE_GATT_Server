@@ -20,7 +20,6 @@ namespace Bluetooth_Xamarin_Client
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
-        private Plugin.FilePicker.Abstractions.FileData pickedFile;
         public MainPage()
         {
             InitializeComponent();
@@ -28,7 +27,7 @@ namespace Bluetooth_Xamarin_Client
 
         public Plugin.FilePicker.Abstractions.FileData SelectedFile()
         {
-            var _selectedFile = pickedFile;
+            var _selectedFile = PickedFile.PickedFile_Selected;
             return _selectedFile;
         }
 
@@ -46,10 +45,10 @@ namespace Bluetooth_Xamarin_Client
                 fileTypes = new string[] { "public.json", "public.jpeg", "com.pkware.zip-archive" }; // same as iOS constant UTType.Image
             }
 
-            pickedFile = await CrossFilePicker.Current.PickFile(fileTypes);
-            if (pickedFile != null)
+            PickedFile.PickedFile_Selected = await CrossFilePicker.Current.PickFile(fileTypes);
+            if (PickedFile.PickedFile_Selected != null)
             {
-                SelectedFileLabel.Text = pickedFile.FileName;
+                SelectedFileLabel.Text = PickedFile.PickedFile_Selected.FileName;
                 SendButton.IsVisible = true;
             }
         }

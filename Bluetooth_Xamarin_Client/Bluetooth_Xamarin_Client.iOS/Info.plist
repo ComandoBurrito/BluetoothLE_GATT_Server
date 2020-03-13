@@ -52,7 +52,7 @@
   <key>NSBluetoothAlwaysUsageDescription</key>
   <string>YOUR CUSTOM MESSAGE</string>
 
-  <key>NSLocationAlwaysAndWhenInUsageDescription</key>
+  <key>NSLocationWhenInUseUsageDescription</key>
   <string>Your current location is used to provide you with a local position according to other devices.</string>
   
   <!--
